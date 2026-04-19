@@ -179,13 +179,13 @@ section { padding:5rem 2rem; }
 .person.walking .briefcase { opacity:1; }
 
 /* Speech bubble */
-.speech { 
-  position:absolute; bottom:130px;
+.speech {
+  position:absolute; bottom:145px;
   background:rgba(201,168,76,0.15); border:1px solid rgba(201,168,76,0.4);
   color:var(--gold-pale); font-size:0.75rem; font-weight:600;
   padding:0.4rem 0.8rem; border-radius:8px; white-space:nowrap;
-  opacity:0; transition:opacity 0.5s 0.8s;
-  pointer-events:none;
+  opacity:0; transition:opacity 0.5s;
+  pointer-events:none; transform:translateX(-50%);
 }
 .speech::after { content:''; position:absolute; bottom:-6px; left:50%; transform:translateX(-50%); width:0; height:0; border-left:6px solid transparent; border-right:6px solid transparent; border-top:6px solid rgba(201,168,76,0.4); }
 .speech.show { opacity:1; }
@@ -427,6 +427,7 @@ footer { background:#060f1e; border-top:1px solid rgba(201,168,76,0.15); padding
 
       <div class="anim-stage">
         <div class="ground"></div>
+        <div class="speech" id="speech" style="left:48%;">J'arrive !</div>
 
         <!-- MAISON -->
         <div class="house" id="house">
@@ -458,7 +459,6 @@ footer { background:#060f1e; border-top:1px solid rgba(201,168,76,0.15); padding
 
         <!-- PERSONNAGE -->
         <div class="person" id="person">
-          <div class="speech" id="speech">J'arrive !</div>
           <svg viewBox="0 0 60 90" fill="none" xmlns="http://www.w3.org/2000/svg">
             <!-- Tête -->
             <circle cx="30" cy="12" r="10" fill="#e8c96a" stroke="#c9a84c" stroke-width="1.5"/>
@@ -671,6 +671,7 @@ function setScene(scene) {
   } else {
     person.classList.remove('go-left');
     person.classList.add('go-right');
+
     building.classList.add('show');
     house.classList.remove('show');
     desc.innerHTML = `<h3>🏢 Intervention en entreprise</h3>
@@ -678,9 +679,15 @@ function setScene(scene) {
       <span class="tag">Val-de-Marne · Île-de-France</span>`;
   }
 
-  // Stop walking after transition, show speech
+  // Stop walking after transition, show speech à la position finale
   setTimeout(() => {
     person.classList.remove('walking');
+    // Repositionner la bulle sur le bonhomme arrivé
+    if(scene === "domicile") {
+      speech.style.left = "20%";
+    } else {
+      speech.style.left = "76%";
+    }
     speech.classList.add('show');
     setTimeout(() => speech.classList.remove('show'), 2500);
   }, 1200);
